@@ -14,25 +14,20 @@ import css from './MovieDetails.module.css';
 
 const MovieDetails = () => {
   const { movieId } = useParams();
-  const [detailsMovie, setDetailsMovie] = useState({});
+  const [detailsMovie, setDetailsMovie] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     setLoading(true);
     getMovieDetailes(movieId)
-      .then(res => {
-        if (res.status !== 200) {
-          return Promise.reject(new Error(`Oops, something went wrong...`));
-        } else return res.json();
-      })
       .then(data => {
-        if (data.length !== 0) {
-          return setDetailsMovie(data);
-        } else
+        if (data.length === 0) {
           return Promise.reject(
             new Error(`Oops, something went wrong... Please try again`)
           );
+        }
+        return setDetailsMovie(data);
       })
       .catch(error => setError(error))
       .finally(() => setLoading(false));
@@ -42,6 +37,8 @@ const MovieDetails = () => {
   const backLinkLocationRef = useRef(location.state?.from ?? '/movies');
 
   const { title, genres, overview, poster_path } = detailsMovie;
+
+  if (!detailsMovie) return;
 
   return (
     <main>
@@ -58,7 +55,7 @@ const MovieDetails = () => {
               src={
                 poster_path
                   ? `https://image.tmdb.org/t/p/w200${poster_path}`
-                  : `https://via.placeholder.com/200x300`
+                  : `https://dummyimage.com/200x300`
               }
               alt="poster "
               width="200"

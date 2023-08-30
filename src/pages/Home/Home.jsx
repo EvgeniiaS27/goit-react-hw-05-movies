@@ -15,16 +15,11 @@ const Home = () => {
   useEffect(() => {
     setLoading(true);
     getTrendingMovies()
-      .then(res => {
-        if (res.status !== 200) {
-          return Promise.reject(new Error(`Oops, something went wrong...`));
-        } else return res.json();
-      })
       .then(data => {
-        if (data.results.length !== 0) {
-          return setMoviesTrand(data.results);
-        } else
+        if (data.results.length === 0) {
           return Promise.reject(new Error(`Oops, something went wrong...`));
+        }
+        return setMoviesTrand(data.results);
       })
       .catch(error => setError(error))
       .finally(() => setLoading(false));

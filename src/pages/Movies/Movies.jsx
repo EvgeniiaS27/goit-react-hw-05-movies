@@ -22,18 +22,13 @@ const Movies = () => {
 
     setLoading(true);
     getSearchMovies(query)
-      .then(res => {
-        if (res.status !== 200) {
-          return Promise.reject(new Error(`Oops, something went wrong...`));
-        } else return res.json();
-      })
       .then(data => {
-        if (data.length !== 0) {
-          return setMovies(data.results);
-        } else
+        if (data.length === 0) {
           return Promise.reject(
             new Error(`Oops, something went wrong... Please try again`)
           );
+        }
+        return setMovies(data.results);
       })
       .catch(error => setError(error))
       .finally(() => setLoading(false));

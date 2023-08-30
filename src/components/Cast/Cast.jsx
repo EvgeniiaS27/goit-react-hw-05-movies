@@ -13,18 +13,13 @@ const Cast = () => {
   useEffect(() => {
     setLoading(true);
     getMovieCast(movieId)
-      .then(res => {
-        if (res.status !== 200) {
-          return Promise.reject(new Error(`Oops, something went wrong...`));
-        } else return res.json();
-      })
       .then(data => {
-        if (data.length !== 0) {
-          return setCast(data.cast);
-        } else
+        if (data.length === 0) {
           return Promise.reject(
             new Error(`Oops, something went wrong... Please try again`)
           );
+        }
+        return setCast(data.cast);
       })
       .catch(error => setError(error))
       .finally(() => setLoading(false));
@@ -44,7 +39,7 @@ const Cast = () => {
                 src={
                   profile_path
                     ? `https://image.tmdb.org/t/p/w200${profile_path}`
-                    : `https://via.placeholder.com/200x300`
+                    : `https://dummyimage.com/200x300&text=${name}`
                 }
                 alt={name}
                 width="200"

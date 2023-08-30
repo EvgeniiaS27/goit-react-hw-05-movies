@@ -13,18 +13,13 @@ const Reviews = () => {
   useEffect(() => {
     setLoading(true);
     getMovieReviews(movieId)
-      .then(res => {
-        if (res.status !== 200) {
-          return Promise.reject(new Error(`Oops, something went wrong...`));
-        } else return res.json();
-      })
       .then(data => {
-        if (data.length !== 0) {
-          return setReviews(data.results);
-        } else
+        if (data.length === 0) {
           return Promise.reject(
             new Error(`Oops, something went wrong... Please try again`)
           );
+        }
+        return setReviews(data.results);
       })
       .catch(error => setError(error))
       .finally(() => setLoading(false));
