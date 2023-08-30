@@ -2,8 +2,9 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { getMovieReviews } from 'services/getMovies';
 import { Loader } from 'components/Loader/Loader';
+import css from './Reviews.module.css';
 
-export const Reviews = () => {
+const Reviews = () => {
   const { movieId } = useParams();
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -33,16 +34,19 @@ export const Reviews = () => {
     <div>
       {error && <h1>{error.message}</h1>}
       {loading && <Loader />}
-      {!reviews
-        ? 'We don`t have any reviews for his movie'
-        : reviews.map(({ author, content, id }) => {
-            return (
-              <li key={id}>
-                <b>Author: {author}</b>
-                <p>{content}</p>
-              </li>
-            );
-          })}
+      <ul className={css.list}>
+        {reviews.length === 0
+          ? 'We don`t have any reviews for his movie'
+          : reviews.map(({ author, content, id }) => {
+              return (
+                <li className={css.itemList} key={id}>
+                  <h3>Author: {author}</h3>
+                  <p>{content}</p>
+                </li>
+              );
+            })}
+      </ul>
     </div>
   );
 };
+export default Reviews;
