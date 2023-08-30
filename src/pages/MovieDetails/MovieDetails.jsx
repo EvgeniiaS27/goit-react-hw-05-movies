@@ -1,7 +1,16 @@
-import { useState, useEffect } from 'react';
-import { Link, Outlet, useParams } from 'react-router-dom';
+import { useState, useEffect, useRef, Suspense } from 'react';
+import {
+  NavLink,
+  Link,
+  Outlet,
+  useLocation,
+  useParams,
+} from 'react-router-dom';
 import { getMovieDetailes } from 'services/getMovies';
 import { Loader } from 'components/Loader/Loader';
+import { Container } from 'components/Container/Container';
+import { Title } from 'components/Title/Title';
+import css from './MovieDetails.module.css';
 
 const MovieDetails = () => {
   const { movieId } = useParams();
@@ -29,47 +38,78 @@ const MovieDetails = () => {
       .finally(() => setLoading(false));
   }, [movieId]);
 
+  const location = useLocation();
+  const backLinkLocationRef = useRef(location.state?.from ?? '/movies');
+
   const { title, genres, overview, poster_path } = detailsMovie;
 
   return (
     <main>
-      {error && <h1>{error.message}</h1>}
-      {loading && <Loader />}
-      <div>
-        <div>
-          <img
-            src={
-              poster_path
-                ? `https://image.tmdb.org/t/p/w200${poster_path}`
-                : `https://via.placeholder.com/200x300`
-            }
-            alt="poster "
-          />
+      <Container>
+        {error && <h1>{error.message}</h1>}
+        {loading && <Loader />}
+        <Link className={css.linkBack} to={backLinkLocationRef.current}>
+          Go to Back
+        </Link>
+
+        <div className={css.boxContant}>
+          <div className={css.poster}>
+            <img
+              src={
+                poster_path
+                  ? `https://image.tmdb.org/t/p/w200${poster_path}`
+                  : `https://via.placeholder.com/200x300`
+              }
+              alt="poster "
+              width="200"
+            />
+          </div>
+          <div className={css.infoContent}>
+            <Title>{title}</Title>
+
+            <h2>Overview</h2>
+            <p>{overview}</p>
+            <h2>Genres</h2>
+            <p>
+              {genres
+                ? genres.map(genre => (
+                    <span className={css.genres} key={genre.id}>
+                      {genre.name}
+                    </span>
+                  ))
+                : ''}
+            </p>
+          </div>
         </div>
         <div>
-          <h1>{title}</h1>
-          <h2>Overview</h2>
-          <p>{overview}</p>
-          <h2>Genres</h2>
-          <p>
-            {genres
-              ? genres.map(genre => <span key={genre.id}>{genre.name}</span>)
-              : ''}
-          </p>
+          <h3>Additional information</h3>
+          <ul className={css.linkList}>
+            <li className={css.item}>
+              <NavLink
+                className={({ isActive }) =>
+                  isActive ? `${css.active}` : `${css.linkItem}`
+                }
+                to="cast"
+              >
+                Cast
+              </NavLink>
+            </li>
+            <li className={css.item}>
+              <NavLink
+                className={({ isActive }) =>
+                  isActive ? `${css.active}` : `${css.linkItem}`
+                }
+                to="reviews"
+              >
+                Reviews
+              </NavLink>
+            </li>
+          </ul>
+          <Suspense fallback={<Loader />}>
+            <Outlet />
+          </Suspense>
         </div>
-      </div>
-      <div>
-        <h3>Additional information</h3>
-        <ul>
-          <li>
-            <Link to="cast">Cast</Link>
-          </li>
-          <li>
-            <Link to="reviews">Reviews</Link>
-          </li>
-        </ul>
-        <Outlet />
-      </div>
+      </Container>
     </main>
   );
 };
