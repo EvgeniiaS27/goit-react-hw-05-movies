@@ -4,6 +4,8 @@ import { getSearchMovies } from 'services/getMovies';
 import { SearchBar } from 'components/SearchBar/SearchBar';
 import { Loader } from 'components/Loader/Loader';
 import { MoviesList } from 'components/MoviesList/MoviesList';
+import { Container } from 'components/Container/Container';
+import { Title } from 'components/Title/Title';
 
 const Movies = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -43,11 +45,14 @@ const Movies = () => {
 
   return (
     <main>
-      <h1>Movies Page</h1>
-      {error && <h1>{error.message}</h1>}
-      {loading && <Loader />}
-      {<SearchBar onSubmit={handleSearchQuery} />}
-      {<MoviesList movies={moveis} />}
+      <Container>
+        <Title>Search Movies </Title>
+
+        {error && <h1>{error.message}</h1>}
+        {loading && <Loader />}
+        {<SearchBar onSubmit={handleSearchQuery} />}
+        {<MoviesList movies={moveis} />}
+      </Container>
     </main>
   );
 };
