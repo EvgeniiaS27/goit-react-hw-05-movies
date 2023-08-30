@@ -21,7 +21,6 @@ export const App = () => {
             <Route path="cast" element={<Cast />} />
             <Route path="reviews" element={<Reviews />} />
           </Route>
-          {/* <Route path="*" element={<Navigate to="/" />} /> */}
         </Route>
       </Routes>
     </div>
