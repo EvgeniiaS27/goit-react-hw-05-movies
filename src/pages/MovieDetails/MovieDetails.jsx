@@ -36,9 +36,9 @@ const MovieDetails = () => {
   const location = useLocation();
   const backLinkLocationRef = useRef(location.state?.from ?? '/movies');
 
-  const { title, genres, overview, poster_path } = detailsMovie;
-
   if (!detailsMovie) return;
+
+  const { title, genres, overview, poster_path } = detailsMovie;
 
   return (
     <main>
