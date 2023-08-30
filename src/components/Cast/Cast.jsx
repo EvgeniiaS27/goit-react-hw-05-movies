@@ -2,8 +2,9 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { getMovieCast } from 'services/getMovies';
 import { Loader } from 'components/Loader/Loader';
+import css from './Cast.module.css';
 
-export const Cast = () => {
+const Cast = () => {
   const { movieId } = useParams();
   const [cast, setCast] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -34,20 +35,24 @@ export const Cast = () => {
       {error && <h1>{error.message}</h1>}
       {loading && <Loader />}
 
-      <ul>
+      <ul className={css.list}>
         {cast.map(({ profile_path, character, name, id }) => {
           return (
-            <li key={id}>
+            <li className={css.itemList} key={id}>
               <img
+                className={css.itemImage}
                 src={
                   profile_path
                     ? `https://image.tmdb.org/t/p/w200${profile_path}`
-                    : `https://via.placeholder.com/50x100`
+                    : `https://via.placeholder.com/200x300`
                 }
                 alt={name}
+                width="200"
               />
-              <h4>{name}</h4>
-              <p>Character: {character}</p>
+              <div className={css.itemInfo}>
+                <h4>{name}</h4>
+                <p>Character: {character}</p>
+              </div>
             </li>
           );
         })}
@@ -55,3 +60,4 @@ export const Cast = () => {
     </div>
   );
 };
+export default Cast;
