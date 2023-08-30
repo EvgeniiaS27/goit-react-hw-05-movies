@@ -3,6 +3,9 @@ import { useState, useEffect } from 'react';
 import { getTrendingMovies } from 'services/getMovies';
 import { Loader } from 'components/Loader/Loader';
 import { MoviesList } from 'components/MoviesList/MoviesList';
+import { Container } from 'components/Container/Container';
+import { Title } from 'components/Title/Title';
+// import css from './Home.module.css';
 
 const Home = () => {
   const [loading, setLoading] = useState(false);
@@ -29,12 +32,15 @@ const Home = () => {
 
   return (
     <main>
-      <h1>Tranding today</h1>
-      {error && <h1>{error.message}</h1>}
-      {loading && <Loader />}
+      <Container>
+        <Title>Tranding today</Title>
 
-      {<MoviesList movies={moviesTrand} />}
+        {error && <h1>{error.message}</h1>}
+        {loading && <Loader />}
+        {<MoviesList movies={moviesTrand} />}
+      </Container>
     </main>
   );
 };
+
 export default Home;
